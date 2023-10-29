@@ -19,8 +19,10 @@ import {
 } from "recharts";
 import { emotions } from "./assets/emotions";
 
-export const Ring = ({ emotion, intensity, color = "#101010" }) => (
+export const Ring = ({ emotion, intensity, color = "#101010", onClick }) => (
    <RingProgress
+      onClick={onClick}
+      style={{ cursor: "pointer" }}
       roundCaps
       label={
          <Text size="xs" ta="center">
@@ -97,6 +99,10 @@ function calculateAverage(data) {
 
 // const weeklyAverages = calculateAverage();
 
+const openModal = (emotion) => {
+   alert(`You clicked on ${emotion}`);
+};
+
 const renderLineChart = (
    <LineChart
       width={600}
@@ -130,6 +136,8 @@ function App() {
                <Flex wrap={"wrap"}>
                   {Object.keys(colorOf).map((emotion) => (
                      <Ring
+                        component="button"
+                        onClick={() => openModal(emotion)}
                         key={emotion}
                         emotion={emotion}
                         intensity={lastDayEmotions[emotion] * 100}
