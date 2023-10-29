@@ -17,6 +17,14 @@ import {
    Tooltip,
    Legend,
 } from "recharts";
+import {
+   Radar,
+   RadarChart,
+   PolarGrid,
+   PolarAngleAxis,
+   PolarRadiusAxis,
+} from "recharts";
+
 import { emotions } from "./assets/emotions";
 
 export const Ring = ({ emotion, intensity, color = "#101010", onClick }) => (
@@ -126,10 +134,52 @@ const renderLineChart = (
    </LineChart>
 );
 
+const generateRandomData = (count) => {
+   const subjects = ["A", "B", "C", "D", "E", "F"]; // Define the subjects you want to include
+   const data = [];
+
+   for (let i = 0; i < count; i++) {
+      const dataPoint = { subject: `Data ${i + 1}` }; // Assign a unique subject label
+
+      subjects.forEach((subject) => {
+         dataPoint[subject] = Math.floor(Math.random() * 150); // Generate a random value between 0 and 150
+      });
+
+      data.push(dataPoint);
+   }
+
+   return data;
+};
+
+const data = generateRandomData(10);
+
+const renderRadarChart = () => (
+   <RadarChart outerRadius={90} width={730} height={250} data={data}>
+      <PolarGrid />
+      <PolarAngleAxis dataKey="subject" />
+      <PolarRadiusAxis angle={30} domain={[0, 150]} />
+      <Radar
+         name="Factor A"
+         dataKey="A"
+         stroke="#8884d8"
+         fill="#8884d8"
+         fillOpacity={0.6}
+      />
+      <Radar
+         name="Factor B"
+         dataKey="B"
+         stroke="#82ca9d"
+         fill="#82ca9d"
+         fillOpacity={0.6}
+      />
+      <Legend />
+   </RadarChart>
+);
+
 function App() {
    return (
       <>
-         <Grid>
+         <Grid gutter={"xl"}>
             <Grid.Col span={6}>
                <Title>Today</Title>
                <Space h="xl" />
@@ -166,6 +216,10 @@ function App() {
                   an element of excitement to your routine. Embrace surprises as
                   opportunities for growth and new perspectives.
                </Text>
+               <Space h="xl" />
+               <Title>Personal Map</Title>
+               <Space h="xl" />
+               <Center>{renderRadarChart()}</Center>
             </Grid.Col>
          </Grid>
       </>
